@@ -10,7 +10,10 @@ const session = require('express-session');
 
 
 // Controllers
+const isSignedIn = require("./middleware/is-signed-in.js");
 const authController = require("./controllers/auth.js");
+const listingController = require("./controllers/lisitng.js");
+const passUserToView = require('./middleware/pass-user-to-view.js');
 
 
 // Set the port from environment variable or default to 3000
@@ -41,6 +44,9 @@ app.use(
 );
 
 app.use('/auth', authController);
+app.use('/listings', isSignedIn, listingController);
+app.use(passUserToView);
+
 
 // Routes
 app.get('/', async (req, res) => {
