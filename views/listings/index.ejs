@@ -13,12 +13,13 @@
         <a href="/listings/new">Add a New Listing</a>
 
         <ul>
-            <% listings.forEach(listing=> { %>
+            <% listings.forEach((listing)=> { %>
                 <li>
-                    <%= listing.streetAddress %>, <%= listing.city %> —
-                            $<%= listing.price %> — <%= listing.size %> sqft
+                    A listing in <%= listing.city %> owned by <%= listing.owner.username %>.
+                    <a href="/listings/<%= listing._id %>">View more details.</a>
                 </li>
                 <% }) %>
+        </ul>
         </ul>
 </body>
 

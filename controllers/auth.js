@@ -22,7 +22,8 @@ router.get('/sign-in', (req, res) => {
 router.post('/sign-in', async (req, res) => {
   const user = await User.findOne({ username: req.body.username });
   if (user && await bcrypt.compare(req.body.password, user.password)) {
-    req.session.user = user;
+    req.session.user = { _id: user._id, username: user.username };
+    console.log("User logged in, session:", req.session.user); 
     res.redirect('/');
   } else {
     res.redirect('/auth/sign-in');
