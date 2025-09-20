@@ -22,8 +22,13 @@ router.get('/:listingId', async (req, res) => {
       req.params.listingId
     ).populate('owner');
 
+    const userHasFavorited = populatedListings.favoritedByUsers.some((user) =>
+      user.equals(req.session.user._id)
+    );
+
     res.render('listings/show.ejs', {
       listing: populatedListings,
+      userHasFavorited: userHasFavorited,
     });
   } catch (error) {
     console.log(error);
@@ -43,21 +48,6 @@ router.get('/:listingId/edit', async (req, res) => {
   }
 });
 
-router.put('/:listingId', async (req, res) => {
-  try {
-    const currentListing = await Listing.findById(req.params.listingId);
-    if (currentListing.owner.equals(req.session.user._id)) {
-      await currentListing.updateOne(req.body);
-      res.redirect('/listings');
-    } else {
-      res.send("You don't have permission to do that.");
-    }
-  } catch (error) {
-    console.log(error);
-    res.redirect('/');
-  }
-});
-
 router.post('/', async (req, res) => {
   try {
     req.body.owner = req.session.user._id;
@@ -66,6 +56,18 @@ router.post('/', async (req, res) => {
   } catch (err) {
     console.log(err);
     res.send('Error creating listing');
+  }
+});
+
+router.post('/:listingId/favorited-by/:userId', async (req, res) => {
+  try {
+    await Listing.findByIdAndUpdate(req.params.listingId, {
+      $push: { favoritedByUsers: req.params.userId },
+    });
+    res.redirect(`/listings/${req.params.listingId}`);
+  } catch (error) {
+    console.log(error);
+    res.redirect('/');
   }
 });
 
