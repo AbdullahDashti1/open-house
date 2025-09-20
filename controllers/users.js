@@ -15,12 +15,15 @@ router.get('/profile', async (req, res) => {
         console.log('myListings:', myListings);
         console.log('myFavoriteListings:', myFavoriteListings);
 
-        res.send('Profile page');
+        res.render('users/show.ejs', {
+            myListings,
+            myFavoriteListings,
+        });
+
     } catch (error) {
         console.log(error);
         res.redirect('/');
     }
 });
-
 
 module.exports = router;

@@ -16,11 +16,15 @@ const usersController = require('./controllers/users.js');
 
 
 const app = express();
+const path = require('path');
+
 
 // Middleware
 app.use(express.urlencoded({ extended: false }));
 app.use(methodOverride('_method'));
-app.use(morgan('dev'));
+
+app.use(express.static(path.join(__dirname, 'public')));
+
 app.use(
   session({
     secret: process.env.SESSION_SECRET,
@@ -47,7 +51,8 @@ mongoose.connection.on('connected', () => {
   console.log('Connected to MongoDB');
 });
 
-const PORT = process.env.PORT || 3000;
+const PORT = process.env.PORT ? process.env.PORT : '3000';
+
 app.listen(PORT, () => {
   console.log(`Server running on port ${PORT}`);
 });
