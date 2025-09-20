@@ -5,7 +5,11 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>
-        <%= listing.owner.username %>'s listing
+        <% if (listing.owner) { %>
+            <%= listing.owner.username %>'s listing
+                <% } else { %>
+                    Listing Details
+                    <% } %>
     </title>
 </head>
 
@@ -21,12 +25,22 @@
         </p>
         <p>Street address: <%= listing.streetAddress %>
         </p>
+
         <h2>Owner</h2>
-        <% if (listing.owner._id.equals(user._id)) { %>
-            <p>You own this!</p>
+        <% if (listing.owner) { %>
+            <p>Owned by: <%= listing.owner.username %>
+            </p>
             <% } else { %>
-                <p>You don't own this, <%= listing.owner.username %> does!</p>
+                <p>No owner assigned</p>
                 <% } %>
+
+                    <% if (listing.owner._id.equals(user._id)) { %>
+                        <p>You own this!</p>
+                        <a href="/listings/<%= listing._id %>/edit">Edit Listing</a>
+                        <form action="/listings/<%= listing._id %>?_method=DELETE" method="POST">
+                            <button type="submit">Delete this listing</button>
+                        </form>
+                        <% } %>
 </body>
 
 </html>

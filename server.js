@@ -11,7 +11,7 @@ const isSignedIn = require('./middleware/is-signed-in.js');
 const passUserToView = require('./middleware/pass-user-to-view.js');
 
 const authController = require('./controllers/auth.js');
-const listingsController = require('./controllers/listing.js');
+const listingsController = require('./controllers/listings.js');
 
 const app = express();
 
